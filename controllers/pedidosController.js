@@ -24,3 +24,17 @@ exports.mostrarPedidos = async (req, res, next) => {
         next()
     }
 }
+
+// Muestra un pedido por su id
+exports.mostrarPedido = async (req, res, next) => {
+    const pedido = await Pedidos.findById(req.params.idPedido).populate('cliente').populate({
+        path:'pedido.producto',
+        model: 'Productos'
+    })
+
+    if (!pedido) {
+        res.json({mensaje: 'Ese pedido no existe'})
+    }
+
+    res.json(pedido)
+}
