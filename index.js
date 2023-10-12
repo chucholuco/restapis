@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 // Definir un dominio(s) para recibir las peticiones
 const whitelist = [process.env.FRONTEND_URL]
 const corsOptions = {
-    origin: (origin, callback) => {
+    origin: (origin, callback) => {        
         const existe = whitelist.some(dominio => dominio === origin)
         if (existe) {
             callback(null, true)
