@@ -4,6 +4,9 @@ const router = express.Router()
 const clienteController = require('../controllers/clienteController')
 const productosController = require('../controllers/productosController')
 const pedidosController = require('../controllers/pedidosController')
+const usuariosController = require('../controllers/usuariosController')
+
+const auth = require('../middleware/auth')
 
 module.exports = function() {
 
@@ -11,7 +14,9 @@ module.exports = function() {
     router.post('/clientes', clienteController.nuevoCliente)
 
     // Obtener todos los clientes
-    router.get('/clientes', clienteController.mostrarClientes)
+    router.get('/clientes', 
+        auth,
+        clienteController.mostrarClientes)
 
     // muestra un cliente en especifico
     router.get('/clientes/:idCliente', clienteController.mostrarCliente)
@@ -44,9 +49,12 @@ module.exports = function() {
     router.delete('/productos/:idProducto',
         productosController.eliminarProducto)
 
+    // Busqueda de productos
+    router.post('/productos/busqueda/:query', productosController.buscarProducto)
+
     /** Pedidos */
     // agrega nuevos pedidos
-    router.post('/pedidos', pedidosController.nuevoPedido)
+    router.post('/pedidos/nuevo/:idUsuario', pedidosController.nuevoPedido)
 
     // mostrar todos los pedidos
     router.get('/pedidos', pedidosController.mostrarPedidos)
@@ -59,6 +67,11 @@ module.exports = function() {
 
     // Eliminar pedido
     router.delete('/pedidos/:idPedido', pedidosController.eliminarPedido)
+
+    // Usuarios
+    router.post('/crear-cuenta', usuariosController.registrarUsuario)
+
+    router.post('/iniciar-sesion', usuariosController.autenticarUsuario)
 
     return router
 }
